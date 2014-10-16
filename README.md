@@ -1,4 +1,4 @@
-#  [![Build Status](https://secure.travis-ci.org/mohebifar/chemjs.png?branch=master)](http://travis-ci.org/mohebifar/chemjs)
+#  [![Build Status](https://secure.travis-ci.org/mohebifar/chemjs.png?branch=master)](https://api.travis-ci.org/mohebifar/chemjs.svg?branch=master)
 
 > Molecular modeling javascript framework
 
