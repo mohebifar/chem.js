@@ -15,6 +15,8 @@ export class Element {
     element.name = data.name;
     element.symbol = data.symbol;
     element.color = data.color;
+
+    return element;
   }
 
   static findByAtomicNumber(atomicNumber) {

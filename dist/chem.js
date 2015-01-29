@@ -834,10 +834,18 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
+var atomIndex = 0;
+
 var Atom = (function () {
   function Atom() {
-    this.element = false;
-    this._data = {};
+    var _this = this;
+    var index = arguments[0] === undefined ? atomIndex++ : arguments[0];
+    return (function () {
+      _this.index = index;
+      _this.element = false;
+      _this._data = {};
+      _this.position = null;
+    })();
   }
 
   _prototypeProperties(Atom, null, {
@@ -895,6 +903,19 @@ var Atom = (function () {
       writable: true,
       enumerable: true,
       configurable: true
+    },
+    toJSON: {
+      value: function toJSON() {
+        return {
+          index: this.index,
+          atomicNumber: this.atomicNumber,
+          symbol: this.element.symbol,
+          position: this.position
+        };
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   });
 
@@ -906,13 +927,20 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
+var bondIndex = 0;
+
 var Bond = (function () {
   function Bond(begin, end) {
+    var _this = this;
     var order = arguments[2] === undefined ? 1 : arguments[2];
-    this._begin = begin;
-    this._end = end;
-    this._order = order;
-    this._data = {};
+    var index = arguments[3] === undefined ? bondIndex++ : arguments[3];
+    return (function () {
+      _this.index = index;
+      _this._begin = begin;
+      _this._end = end;
+      _this._order = order;
+      _this._data = {};
+    })();
   }
 
   _prototypeProperties(Bond, null, {
@@ -970,6 +998,18 @@ var Bond = (function () {
       writable: true,
       enumerable: true,
       configurable: true
+    },
+    toJSON: {
+      value: function toJSON() {
+        return {
+          begin: this.begin.index,
+          end: this.end.index,
+          order: this.order
+        };
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
     }
   });
 
@@ -997,6 +1037,8 @@ var Element = (function () {
         element.name = data.name;
         element.symbol = data.symbol;
         element.color = data.color;
+
+        return element;
       },
       writable: true,
       enumerable: true,
@@ -1030,6 +1072,7 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
 
 var Molecule = (function () {
   function Molecule() {
+    this.id = 0;
     this._atoms = [];
     this._bonds = [];
     this._data = {};
@@ -1166,6 +1209,17 @@ var Molecule = (function () {
     hasData: {
       value: function hasData(key) {
         return typeof this._data[key] !== "undefined";
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    toJSON: {
+      value: function toJSON() {
+        return {
+          atoms: this.atoms,
+          bonds: this.bonds
+        };
       },
       writable: true,
       enumerable: true,

@@ -1,6 +1,9 @@
+var bondIndex = 0;
+
 export class Bond {
 
-  constructor(begin, end, order = 1) {
+  constructor(begin, end, order = 1, index = bondIndex++) {
+    this.index = index;
     this._begin = begin;
     this._end = end;
     this._order = order;
@@ -42,6 +45,14 @@ export class Bond {
 
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
+  }
+
+  toJSON() {
+    return {
+      begin: this.begin.index,
+      end: this.end.index,
+      order: this.order
+    };
   }
 
 }

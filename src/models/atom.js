@@ -1,10 +1,14 @@
 import Element from 'element.js';
 
+var atomIndex = 0;
+
 export class Atom {
 
-  constructor() {
+  constructor(index = atomIndex++) {
+    this.index = index;
     this.element = false;
     this._data = {};
+    this.position = null;
   }
 
   /**
@@ -40,6 +44,15 @@ export class Atom {
 
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
+  }
+
+  toJSON() {
+    return {
+      index: this.index,
+      atomicNumber: this.atomicNumber,
+      symbol: this.element.symbol,
+      position: this.position
+    };
   }
 
 }

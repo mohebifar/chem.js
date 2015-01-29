@@ -1,6 +1,7 @@
 export class Molecule {
 
   constructor() {
+    this.id = 0;
     this._atoms = [];
     this._bonds = [];
     this._data = {};
@@ -91,6 +92,13 @@ export class Molecule {
 
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
+  }
+
+  toJSON() {
+    return {
+      atoms: this.atoms,
+      bonds: this.bonds
+    };
   }
 
 }
