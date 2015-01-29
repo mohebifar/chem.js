@@ -1,54 +1,76 @@
-'use strict';
+var grunt = require('grunt');
+require('load-grunt-tasks')(grunt);
 
-module.exports = function(grunt) {
-  // Show elapsed time at the end
-  require('time-grunt')(grunt);
-  // Load all grunt tasks
-  require('load-grunt-tasks')(grunt);
-
-  // Project configuration.
-  grunt.initConfig({
-    nodeunit: {
-      files: ['test/**/*_test.js']
+grunt.initConfig({
+  '6to5': {
+    options: {
+      sourceMap: true,
+      modules: 'ignore'
     },
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
-      },
-      gruntfile: {
-        src: 'Gruntfile.js'
-      },
-      lib: {
-        src: ['lib/**/*.js']
-      },
-      test: {
-        src: ['test/**/*.js']
-      }
+    dist: {
+      files:  [{
+        expand: true,
+        cwd: 'src',
+        src: ['**/*.js', '!intro.js', '!outro.js'],
+        dest: '.tmp/es5',
+        ext: '.js'
+      }]
+    }
+  },
+  concat: {
+    options: {
+      sourceMap: true,
+      separator: ''
     },
-    mochacli: {
-      options: {
-        reporter: 'nyan',
-        bail: true
-      },
-      all: ['test/*.js']
+    dist: {
+      src: [
+        'src/intro.js',
+        '.tmp/es5/**/*.js',
+        'src/outro.js'
+      ],
+      dest: 'dist/chem.js'
+    }
+  },
+  uglify: {
+    options: {
+      sourceMap: true
     },
-    watch: {
-      gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
-      },
-      lib: {
-        files: '<%= jshint.lib.src %>',
-        tasks: ['jshint:lib', 'mochacli']
-      },
-      test: {
-        files: '<%= jshint.test.src %>',
-        tasks: ['jshint:test', 'mochacli']
+    build: {
+      files: {
+        'dist/chem.min.js': ['dist/chem.js']
       }
     }
-  });
+  },
+  watch: {
+    scripts: {
+      files: ['src/**/*.js'],
+      tasks: ['default'],
+      options: {
+        livereload: true,
+        spawn: false
+      }
+    },
+    examples: {
+      files: ['examples/**/*'],
+      options: {
+        livereload: true,
+        spawn: false
+      }
+    }
+  },
+  jshint: {
+    options: {
+      jshintrc: '.jshintrc',
+    },
+    allFiles: [
+      'src/**/*.js', '!src/intro.js', '!src/outro.js'
+    ]
+  },
+  clean: {
+    tmp: ['.tmp']
+  }
+});
 
-  // Default task.
-  grunt.registerTask('default', ['jshint', 'mochacli']);
-};
+grunt.registerTask('default', ['clean', '6to5', 'concat']);
+
+grunt.registerTask('build', ['default', 'uglify']);

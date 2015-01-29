@@ -1,0 +1,25 @@
+{
+  "name": "chem.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/mohebifar/chem.js",
+  "authors": [
+    "Mohamad Mohebifar <netfars@gmail.com>"
+  ],
+  "description": "Javascript chemical modeling",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals"
+  ],
+  "keywords": [
+    "chem"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
