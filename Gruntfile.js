@@ -9,26 +9,27 @@ grunt.initConfig({
     },
     dist: {
       files:  [{
-        expand: true,
-        cwd: 'src',
-        src: ['**/*.js', '!intro.js', '!outro.js'],
-        dest: '.tmp/es5',
-        ext: '.js'
+        src: '.tmp/es6/concat.js',
+        dest: '.tmp/es5/concat.js'
       }]
     }
   },
   concat: {
     options: {
       sourceMap: true,
-      separator: ''
+      separator: '\n'
     },
     dist: {
       src: [
         'src/intro.js',
-        '.tmp/es5/**/*.js',
+        '.tmp/es5/concat.js',
         'src/outro.js'
       ],
       dest: 'dist/chem.js'
+    },
+    es6: {
+      src: ['src/**/*.js', '!src/intro.js', '!src/outro.js'],
+      dest: '.tmp/es6/concat.js'
     }
   },
   uglify: {
@@ -42,25 +43,33 @@ grunt.initConfig({
     }
   },
   watch: {
+    options: {
+      spawn: false
+    },
+    livereload: {
+      files: ['src/**/*.js', 'examples/**/*'],
+      options: {
+        livereload: true
+      }
+    },
     scripts: {
       files: ['src/**/*.js'],
-      tasks: ['default'],
-      options: {
-        livereload: true,
-        spawn: false
-      }
+      tasks: ['default']
     },
     examples: {
       files: ['examples/**/*'],
       options: {
-        livereload: true,
-        spawn: false
+        livereload: true
       }
+    },
+    elements: {
+      files: ['src/data/elements.json'],
+      tasks: ['shell:elements']
     }
   },
   jshint: {
     options: {
-      jshintrc: '.jshintrc',
+      jshintrc: '.jshintrc'
     },
     allFiles: [
       'src/**/*.js', '!src/intro.js', '!src/outro.js'
@@ -68,9 +77,17 @@ grunt.initConfig({
   },
   clean: {
     tmp: ['.tmp']
+  },
+  shell: {
+    options: {
+      stderr: false
+    },
+    elements: {
+      command: 'node data.js'
+    }
   }
 });
 
-grunt.registerTask('default', ['clean', '6to5', 'concat']);
+grunt.registerTask('default', ['clean', 'concat:es6', '6to5', 'concat:dist']);
 
 grunt.registerTask('build', ['default', 'uglify']);
