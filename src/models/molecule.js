@@ -2,6 +2,11 @@ import Emitter from '../core/emitter.js';
 
 export class Molecule extends Emitter {
 
+  /**
+   * Constructor of molecule
+   *
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -71,6 +76,12 @@ export class Molecule extends Emitter {
     return this._atoms;
   }
 
+  /**
+   * Invokes the given callback for each atom
+   *
+   * @method forEachAtom
+   * @param callback
+   */
   forEachAtom(callback) {
     var atoms = this.atoms;
     for (var i in atoms) {
@@ -78,6 +89,13 @@ export class Molecule extends Emitter {
     }
   }
 
+
+  /**
+   * Invokes the given callback for each bond
+   *
+   * @method forEachBond
+   * @param callback
+   */
   forEachBond(callback) {
     var bonds = this.bonds;
     for (var i in bonds) {
@@ -85,24 +103,78 @@ export class Molecule extends Emitter {
     }
   }
 
+  /**
+   * Inject some data
+   *
+   * @method setData
+   * @param key
+   * @param value
+   * @returns {Bond}
+   */
   setData(key, value) {
     this._data[key] = value;
     return this;
   }
 
+  /**
+   * Get injected data
+   *
+   * @method getData
+   * @param key
+   * @returns {*}
+   */
   getData(key) {
     return this._data[key];
   }
 
+  /**
+   * Checks if data with given key exists
+   *
+   * @method hasData
+   * @param key
+   * @returns {boolean}
+   */
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
   }
 
+  /**
+   * Returns the molecule JSON representation.
+   *
+   * @returns {{atoms: *, bonds: *}}
+   */
   toJSON() {
     return {
       atoms: this.atoms,
       bonds: this.bonds
     };
+  }
+
+  readJSON(json) {
+    var atoms = [], bonds = [];
+
+    for (var i in json.atoms) {
+      let data = json.atoms[i];
+      let atom = new Chem.Atom();
+
+      atom.atomicNumber = data.atomicNumber;
+
+      if(typeof LiThree !== 'undefined') {
+        atom.position = new LiThree.Math.Vector3(data.position.x, data.position.y, data.position.z);
+      } else {
+        atom.position = data.position;
+      }
+
+      atoms.push(atom);
+    }
+
+    for (var i in json.bonds) {
+      let data = json.bonds[i];
+      let bond = new Chem.Bond(atoms[data.begin], atoms[data.end]);
+
+      bond.order = data.order;
+    }
+
   }
 
 }

@@ -238,6 +238,10 @@ var Elements = { "1": { name: "Hydrogen", color: 10066329, atomicNumber: 1, atom
 var atomIndex = 0;
 
 var Atom = (function (Emitter) {
+  /**
+   * @constructor
+   * @param index
+   */
   function Atom() {
     var _this = this;
     var index = arguments[0] === undefined ? atomIndex++ : arguments[0];
@@ -286,6 +290,16 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     setData: {
+
+
+      /**
+       * Inject some data
+       *
+       * @method setData
+       * @param key
+       * @param value
+       * @returns {Bond}
+       */
       value: function setData(key, value) {
         this._data[key] = value;
         return this;
@@ -295,6 +309,14 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     getData: {
+
+      /**
+       * Get injected data
+       *
+       * @method getData
+       * @param key
+       * @returns {*}
+       */
       value: function getData(key) {
         return this._data[key];
       },
@@ -303,6 +325,14 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     hasData: {
+
+      /**
+       * Checks if data with given key exists
+       *
+       * @method hasData
+       * @param key
+       * @returns {boolean}
+       */
       value: function hasData(key) {
         return typeof this._data[key] !== "undefined";
       },
@@ -311,6 +341,13 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     addBond: {
+
+      /**
+       * Add a bond to atom
+       *
+       * @method addBond
+       * @param bond
+       */
       value: function addBond(bond) {
         this._bonds.push(bond);
       },
@@ -319,6 +356,13 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     removeBond: {
+
+      /**
+       * Remove a bond from atom
+       *
+       * @method removeBond
+       * @param bond
+       */
       value: function removeBond(bond) {
         this._bonds.splice(this._bonds.indexOf(bond), 1);
       },
@@ -327,6 +371,12 @@ var Atom = (function (Emitter) {
       configurable: true
     },
     toJSON: {
+
+      /**
+       * Returns the bond JSON representation.
+       *
+       * @returns {{index: (Atom.index|*), atomicNumber: *, symbol: (*|symbol|Elements.symbol|Atom.toJSON.symbol|.toJSON.value.symbol|c.symbol), position: (Atom.position|*)}}
+       */
       value: function toJSON() {
         return {
           index: this.index,
@@ -347,6 +397,15 @@ var Atom = (function (Emitter) {
 var bondIndex = 0;
 
 var Bond = (function (Emitter) {
+  /**
+   * Constructor of Bond
+   *
+   * @constructor
+   * @param begin
+   * @param end
+   * @param order
+   * @param index
+   */
   function Bond(begin, end) {
     var _this2 = this;
     var order = arguments[2] === undefined ? 1 : arguments[2];
@@ -366,6 +425,12 @@ var Bond = (function (Emitter) {
 
   _prototypeProperties(Bond, null, {
     begin: {
+
+      /**
+       * The first atom of bond
+       *
+       * @property {Atom} begin
+       */
       set: function (begin) {
         this._begin = begin;
         this.emit("atomset", "begin", begin);
@@ -378,6 +443,12 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     end: {
+
+      /**
+       * The second atom of bond
+       *
+       * @property {Atom} end
+       */
       set: function (end) {
         this._end = end;
         this.emit("atomset", "end", end);
@@ -390,6 +461,12 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     order: {
+
+      /**
+       * Order of bond
+       *
+       * @property {Number} order
+       */
       set: function (order) {
         this._order = order;
         this.emit("order", order);
@@ -401,6 +478,16 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     setData: {
+
+
+      /**
+       * Inject some data
+       *
+       * @method setData
+       * @param key
+       * @param value
+       * @returns {Bond}
+       */
       value: function setData(key, value) {
         this._data[key] = value;
         return this;
@@ -410,6 +497,14 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     getData: {
+
+      /**
+       * Get injected data
+       *
+       * @method getData
+       * @param key
+       * @returns {*}
+       */
       value: function getData(key) {
         return this._data[key];
       },
@@ -418,6 +513,14 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     hasData: {
+
+      /**
+       * Checks if data with given key exists
+       *
+       * @method hasData
+       * @param key
+       * @returns {boolean}
+       */
       value: function hasData(key) {
         return typeof this._data[key] !== "undefined";
       },
@@ -426,6 +529,14 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     getPartner: {
+
+      /**
+       * Returns the atom which is not equal to given atom.
+       *
+       * @method getPartner
+       * @param atom
+       * @returns {*}
+       */
       value: function getPartner(atom) {
         if (this._begin === atom) {
           return this._end;
@@ -440,6 +551,15 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     getPositionOfAtom: {
+
+      /**
+       * Returns the position of atom whether it's begin or end
+       *
+       * @throws error if the given atom is not part of this bond
+       * @method getPositionOfAtom
+       * @param atom
+       * @returns {string}
+       */
       value: function getPositionOfAtom(atom) {
         if (this._begin === atom) {
           return "begin";
@@ -454,6 +574,13 @@ var Bond = (function (Emitter) {
       configurable: true
     },
     toJSON: {
+
+      /**
+       * Returns the bond JSON representation.
+       *
+       * @method toJSON
+       * @returns {{begin: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), end: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), order: *}}
+       */
       value: function toJSON() {
         return {
           begin: this.begin.index,
@@ -471,6 +598,9 @@ var Bond = (function (Emitter) {
 })(Emitter);
 
 var Element = (function () {
+  /**
+   * Constructor of element
+   */
   function Element() {
     this.atomicNumber = 0;
     this.name = "";
@@ -480,13 +610,20 @@ var Element = (function () {
 
   _prototypeProperties(Element, {
     createFromData: {
+
+      /**
+       * @static
+       * @method createFromData
+       * @param {Object} data
+       * @returns {Element}
+       */
       value: function createFromData(data) {
         var element = new Element();
         element.atomicNumber = data.atomicNumber;
+        element.atomicRadius = data.atomicRadius;
+        element.color = data.color;
         element.name = data.name;
         element.symbol = data.symbol;
-        element.color = data.color;
-        element.atomicRadius = data.atomicRadius;
 
         return element;
       },
@@ -495,6 +632,13 @@ var Element = (function () {
       configurable: true
     },
     findByAtomicNumber: {
+
+      /**
+       * @static
+       * @method findByAtomicNumber
+       * @param {Number} atomicNumber
+       * @returns {Element|boolean}
+       */
       value: function findByAtomicNumber(atomicNumber) {
         for (var i in Elements) {
           var element = Elements[i];
@@ -516,6 +660,11 @@ var Element = (function () {
 })();
 
 var Molecule = (function (Emitter) {
+  /**
+   * Constructor of molecule
+   *
+   * @constructor
+   */
   function Molecule() {
     _get(Object.getPrototypeOf(Molecule.prototype), "constructor", this).call(this);
 
@@ -617,6 +766,13 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     forEachAtom: {
+
+      /**
+       * Invokes the given callback for each atom
+       *
+       * @method forEachAtom
+       * @param callback
+       */
       value: function forEachAtom(callback) {
         var atoms = this.atoms;
         for (var i in atoms) {
@@ -628,6 +784,14 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     forEachBond: {
+
+
+      /**
+       * Invokes the given callback for each bond
+       *
+       * @method forEachBond
+       * @param callback
+       */
       value: function forEachBond(callback) {
         var bonds = this.bonds;
         for (var i in bonds) {
@@ -639,6 +803,15 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     setData: {
+
+      /**
+       * Inject some data
+       *
+       * @method setData
+       * @param key
+       * @param value
+       * @returns {Bond}
+       */
       value: function setData(key, value) {
         this._data[key] = value;
         return this;
@@ -648,6 +821,14 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     getData: {
+
+      /**
+       * Get injected data
+       *
+       * @method getData
+       * @param key
+       * @returns {*}
+       */
       value: function getData(key) {
         return this._data[key];
       },
@@ -656,6 +837,14 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     hasData: {
+
+      /**
+       * Checks if data with given key exists
+       *
+       * @method hasData
+       * @param key
+       * @returns {boolean}
+       */
       value: function hasData(key) {
         return typeof this._data[key] !== "undefined";
       },
@@ -664,11 +853,48 @@ var Molecule = (function (Emitter) {
       configurable: true
     },
     toJSON: {
+
+      /**
+       * Returns the molecule JSON representation.
+       *
+       * @returns {{atoms: *, bonds: *}}
+       */
       value: function toJSON() {
         return {
           atoms: this.atoms,
           bonds: this.bonds
         };
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    readJSON: {
+      value: function readJSON(json) {
+        var atoms = [],
+            bonds = [];
+
+        for (var i in json.atoms) {
+          var data = json.atoms[i];
+          var atom = new Chem.Atom();
+
+          atom.atomicNumber = data.atomicNumber;
+
+          if (typeof LiThree !== "undefined") {
+            atom.position = new LiThree.Math.Vector3(data.position.x, data.position.y, data.position.z);
+          } else {
+            atom.position = data.position;
+          }
+
+          atoms.push(atom);
+        }
+
+        for (var i in json.bonds) {
+          var data = json.bonds[i];
+          var bond = new Chem.Bond(atoms[data.begin], atoms[data.end]);
+
+          bond.order = data.order;
+        }
       },
       writable: true,
       enumerable: true,
@@ -687,6 +913,7 @@ root.Chem = {
   Atom: Atom,
   Bond: Bond,
   Element: Element,
+  Molecule: Molecule,
   Data: {
     Elements: Elements
   }

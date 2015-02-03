@@ -4,6 +4,15 @@ var bondIndex = 0;
 
 export class Bond extends Emitter {
 
+  /**
+   * Constructor of Bond
+   *
+   * @constructor
+   * @param begin
+   * @param end
+   * @param order
+   * @param index
+   */
   constructor(begin, end, order = 1, index = bondIndex++) {
     super();
 
@@ -14,6 +23,11 @@ export class Bond extends Emitter {
     this._data = {};
   }
 
+  /**
+   * The first atom of bond
+   *
+   * @property {Atom} begin
+   */
   set begin(begin) {
     this._begin = begin;
     this.emit('atomset', 'begin', begin);
@@ -24,6 +38,11 @@ export class Bond extends Emitter {
     return this._begin;
   }
 
+  /**
+   * The second atom of bond
+   *
+   * @property {Atom} end
+   */
   set end(end) {
     this._end = end;
     this.emit('atomset', 'end', end);
@@ -34,6 +53,11 @@ export class Bond extends Emitter {
     return this._end;
   }
 
+  /**
+   * Order of bond
+   *
+   * @property {Number} order
+   */
   set order(order) {
     this._order = order;
     this.emit('order', order);
@@ -43,19 +67,49 @@ export class Bond extends Emitter {
     return this._order;
   }
 
+
+  /**
+   * Inject some data
+   *
+   * @method setData
+   * @param key
+   * @param value
+   * @returns {Bond}
+   */
   setData(key, value) {
     this._data[key] = value;
     return this;
   }
 
+  /**
+   * Get injected data
+   *
+   * @method getData
+   * @param key
+   * @returns {*}
+   */
   getData(key) {
     return this._data[key];
   }
 
+  /**
+   * Checks if data with given key exists
+   *
+   * @method hasData
+   * @param key
+   * @returns {boolean}
+   */
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
   }
 
+  /**
+   * Returns the atom which is not equal to given atom.
+   *
+   * @method getPartner
+   * @param atom
+   * @returns {*}
+   */
   getPartner(atom) {
     if (this._begin === atom) {
       return this._end;
@@ -66,6 +120,14 @@ export class Bond extends Emitter {
     }
   }
 
+  /**
+   * Returns the position of atom whether it's begin or end
+   *
+   * @throws error if the given atom is not part of this bond
+   * @method getPositionOfAtom
+   * @param atom
+   * @returns {string}
+   */
   getPositionOfAtom(atom) {
     if (this._begin === atom) {
       return 'begin';
@@ -76,6 +138,12 @@ export class Bond extends Emitter {
     }
   }
 
+  /**
+   * Returns the bond JSON representation.
+   *
+   * @method toJSON
+   * @returns {{begin: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), end: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), order: *}}
+   */
   toJSON() {
     return {
       begin: this.begin.index,
