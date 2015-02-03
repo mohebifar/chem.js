@@ -289,6 +289,20 @@ var Atom = (function (Emitter) {
       enumerable: true,
       configurable: true
     },
+    bonds: {
+
+      /**
+       * Get list of bonds
+       *
+       * @readonly
+       * @property {Bond[]} bonds
+       */
+      get: function () {
+        return this._bonds;
+      },
+      enumerable: true,
+      configurable: true
+    },
     setData: {
 
 
@@ -414,8 +428,8 @@ var Bond = (function (Emitter) {
       _get(Object.getPrototypeOf(Bond.prototype), "constructor", _this2).call(_this2);
 
       _this2.index = index;
-      _this2._begin = begin;
-      _this2._end = end;
+      _this2.begin = begin;
+      _this2.end = end;
       _this2._order = order;
       _this2._data = {};
     })();
@@ -433,8 +447,10 @@ var Bond = (function (Emitter) {
        */
       set: function (begin) {
         this._begin = begin;
+
+        begin.addBond(this);
+        begin.emit("bond", this);
         this.emit("atomset", "begin", begin);
-        end.emit("bond", this);
       },
       get: function () {
         return this._begin;
@@ -451,8 +467,10 @@ var Bond = (function (Emitter) {
        */
       set: function (end) {
         this._end = end;
-        this.emit("atomset", "end", end);
+
+        end.addBond(this);
         end.emit("bond", this);
+        this.emit("atomset", "end", end);
       },
       get: function () {
         return this._end;
@@ -676,7 +694,45 @@ var Molecule = (function (Emitter) {
 
   _inherits(Molecule, Emitter);
 
-  _prototypeProperties(Molecule, null, {
+  _prototypeProperties(Molecule, {
+    readJSON: {
+      value: function readJSON(json) {
+        var molecule = new Molecule(),
+            atoms = [],
+            i;
+
+        for (i in json.atoms) {
+          var data = json.atoms[i];
+          var atom = new Chem.Atom();
+
+          atom.atomicNumber = data.atomicNumber;
+
+          if (typeof LiThree !== "undefined") {
+            atom.position = new LiThree.Math.Vector3(data.position.x, data.position.y, data.position.z);
+          } else {
+            atom.position = data.position;
+          }
+
+          atoms[i] = atom;
+          molecule.addAtom(atom);
+        }
+
+        for (i in json.bonds) {
+          var data = json.bonds[i];
+          var bond = new Chem.Bond(atoms[data.begin], atoms[data.end]);
+
+          bond.order = data.order;
+
+          molecule.addBond(bond);
+        }
+
+        return molecule;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  }, {
     addAtom: {
 
       /**
@@ -864,37 +920,6 @@ var Molecule = (function (Emitter) {
           atoms: this.atoms,
           bonds: this.bonds
         };
-      },
-      writable: true,
-      enumerable: true,
-      configurable: true
-    },
-    readJSON: {
-      value: function readJSON(json) {
-        var atoms = [],
-            bonds = [];
-
-        for (var i in json.atoms) {
-          var data = json.atoms[i];
-          var atom = new Chem.Atom();
-
-          atom.atomicNumber = data.atomicNumber;
-
-          if (typeof LiThree !== "undefined") {
-            atom.position = new LiThree.Math.Vector3(data.position.x, data.position.y, data.position.z);
-          } else {
-            atom.position = data.position;
-          }
-
-          atoms.push(atom);
-        }
-
-        for (var i in json.bonds) {
-          var data = json.bonds[i];
-          var bond = new Chem.Bond(atoms[data.begin], atoms[data.end]);
-
-          bond.order = data.order;
-        }
       },
       writable: true,
       enumerable: true,

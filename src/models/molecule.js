@@ -150,31 +150,37 @@ export class Molecule extends Emitter {
     };
   }
 
-  readJSON(json) {
-    var atoms = [], bonds = [];
+  static readJSON(json) {
+    var molecule = new Molecule(),
+      atoms = [],
+      i;
 
-    for (var i in json.atoms) {
+    for (i in json.atoms) {
       let data = json.atoms[i];
       let atom = new Chem.Atom();
 
       atom.atomicNumber = data.atomicNumber;
 
-      if(typeof LiThree !== 'undefined') {
+      if (typeof LiThree !== 'undefined') {
         atom.position = new LiThree.Math.Vector3(data.position.x, data.position.y, data.position.z);
       } else {
         atom.position = data.position;
       }
 
-      atoms.push(atom);
+      atoms[i] = atom;
+      molecule.addAtom(atom);
     }
 
-    for (var i in json.bonds) {
+    for (i in json.bonds) {
       let data = json.bonds[i];
       let bond = new Chem.Bond(atoms[data.begin], atoms[data.end]);
 
       bond.order = data.order;
+
+      molecule.addBond(bond);
     }
 
+    return molecule;
   }
 
 }

@@ -17,8 +17,8 @@ export class Bond extends Emitter {
     super();
 
     this.index = index;
-    this._begin = begin;
-    this._end = end;
+    this.begin = begin;
+    this.end = end;
     this._order = order;
     this._data = {};
   }
@@ -30,8 +30,10 @@ export class Bond extends Emitter {
    */
   set begin(begin) {
     this._begin = begin;
+
+    begin.addBond(this);
+    begin.emit('bond', this);
     this.emit('atomset', 'begin', begin);
-    end.emit('bond', this);
   }
 
   get begin() {
@@ -45,8 +47,10 @@ export class Bond extends Emitter {
    */
   set end(end) {
     this._end = end;
-    this.emit('atomset', 'end', end);
+
+    end.addBond(this);
     end.emit('bond', this);
+    this.emit('atomset', 'end', end);
   }
 
   get end() {

@@ -41,6 +41,16 @@ export class Atom extends Emitter {
     this.setElement(Element.findByAtomicNumber(atomicNumber));
   }
 
+  /**
+   * Get list of bonds
+   *
+   * @readonly
+   * @property {Bond[]} bonds
+   */
+  get bonds() {
+    return this._bonds;
+  }
+
 
   /**
    * Inject some data
