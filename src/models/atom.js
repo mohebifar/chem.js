@@ -1,14 +1,18 @@
 import Element from 'element.js';
+import Emitter from '../core/emitter.js';
 
 var atomIndex = 0;
 
-export class Atom {
+export class Atom extends Emitter {
 
   constructor(index = atomIndex++) {
+    super();
+
     this.index = index;
     this.element = false;
     this._data = {};
     this.position = null;
+    this._bonds = [];
   }
 
   /**
@@ -44,6 +48,14 @@ export class Atom {
 
   hasData(key) {
     return typeof this._data[key] !== 'undefined';
+  }
+
+  addBond(bond) {
+    this._bonds.push(bond);
+  }
+
+  removeBond(bond) {
+    this._bonds.splice(this._bonds.indexOf(bond), 1);
   }
 
   toJSON() {

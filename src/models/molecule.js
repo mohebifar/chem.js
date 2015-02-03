@@ -1,6 +1,10 @@
-export class Molecule {
+import Emitter from '../core/emitter.js';
+
+export class Molecule extends Emitter {
 
   constructor() {
+    super();
+
     this.id = 0;
     this._atoms = [];
     this._bonds = [];
@@ -30,7 +34,7 @@ export class Molecule {
   /**
    * Remove a bond from molecule
    *
-   * @mehtod deleteAtom
+   * @method deleteAtom
    * @param {Atom} atom
    */
   deleteAtom(atom) {

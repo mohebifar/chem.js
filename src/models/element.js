@@ -15,6 +15,7 @@ export class Element {
     element.name = data.name;
     element.symbol = data.symbol;
     element.color = data.color;
+    element.atomicRadius = data.atomicRadius;
 
     return element;
   }
