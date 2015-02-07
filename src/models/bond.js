@@ -16,11 +16,17 @@ export class Bond extends Emitter {
   constructor(begin, end, order = 1, index = bondIndex++) {
     super();
 
-    this.index = index;
-    this.begin = begin;
-    this.end = end;
-    this._order = order;
-    this._data = {};
+    var _this = this;
+    _this.index = index;
+    _this.begin = begin;
+    _this.end = end;
+    _this._order = order;
+    _this._data = {};
+
+    _this.on('delete', function () {
+      _this.begin.removeBond(_this);
+      _this.end.removeBond(_this);
+    });
   }
 
   /**
@@ -140,6 +146,10 @@ export class Bond extends Emitter {
     } else {
       throw 'The given atom is not a part of this bond';
     }
+  }
+
+  delete() {
+    this.emit('delete');
   }
 
   /**

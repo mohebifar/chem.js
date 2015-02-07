@@ -12,11 +12,19 @@ export class Atom extends Emitter {
   constructor(index = atomIndex++) {
     super();
 
-    this.index = index;
-    this.element = false;
-    this._data = {};
-    this.position = null;
-    this._bonds = [];
+    var _this = this;
+
+    _this.index = index;
+    _this.element = false;
+    _this._data = {};
+    _this.position = null;
+    _this._bonds = [];
+
+    _this.on('delete', function () {
+      for (var i in _this._bonds) {
+        _this._bonds[i].delete();
+      }
+    });
   }
 
   /**
@@ -104,7 +112,13 @@ export class Atom extends Emitter {
    * @param bond
    */
   removeBond(bond) {
-    this._bonds.splice(this._bonds.indexOf(bond), 1);
+    var _bonds = this._bonds;
+
+    _bonds.splice(_bonds.indexOf(bond), 1);
+  }
+
+  delete() {
+    this.emit('delete');
   }
 
   /**
