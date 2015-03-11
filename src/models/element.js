@@ -19,7 +19,7 @@ export class Element {
    * @returns {Element}
    */
   static createFromData(data) {
-    var element = new Element();
+    let element = new Element();
     element.atomicNumber = data.atomicNumber;
     element.atomicRadius = data.atomicRadius;
     element.color = data.color;
@@ -36,8 +36,8 @@ export class Element {
    * @returns {Element|boolean}
    */
   static findByAtomicNumber(atomicNumber) {
-    for (var i in Elements) {
-      var element = Elements[i];
+    for (let i in Elements) {
+      let element = Elements[i];
 
       if (element.atomicNumber === atomicNumber) {
         return Element.createFromData(element);

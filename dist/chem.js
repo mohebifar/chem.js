@@ -243,12 +243,10 @@ var Atom = (function (Emitter) {
    * @param index
    */
   function Atom() {
-    var _this2 = this;
+    var _this = this;
     var index = arguments[0] === undefined ? atomIndex++ : arguments[0];
     return (function () {
-      _get(Object.getPrototypeOf(Atom.prototype), "constructor", _this2).call(_this2);
-
-      var _this = _this2;
+      _get(Object.getPrototypeOf(Atom.prototype), "constructor", _this).call(_this);
 
       _this.index = index;
       _this.element = false;
@@ -320,7 +318,7 @@ var Atom = (function (Emitter) {
        * @method setData
        * @param key
        * @param value
-       * @returns {Bond}
+       * @returns {*}
        */
       value: function setData(key, value) {
         this._data[key] = value;
@@ -439,22 +437,21 @@ var Bond = (function (Emitter) {
    * @param index
    */
   function Bond(begin, end) {
-    var _this3 = this;
+    var _this2 = this;
     var order = arguments[2] === undefined ? 1 : arguments[2];
     var index = arguments[3] === undefined ? bondIndex++ : arguments[3];
     return (function () {
-      _get(Object.getPrototypeOf(Bond.prototype), "constructor", _this3).call(_this3);
+      _get(Object.getPrototypeOf(Bond.prototype), "constructor", _this2).call(_this2);
 
-      var _this = _this3;
-      _this.index = index;
-      _this.begin = begin;
-      _this.end = end;
-      _this._order = order;
-      _this._data = {};
+      _this2.index = index;
+      _this2.begin = begin;
+      _this2.end = end;
+      _this2._order = order;
+      _this2._data = {};
 
-      _this.on("delete", function () {
-        _this.begin.removeBond(_this);
-        _this.end.removeBond(_this);
+      _this2.on("delete", function () {
+        _this2.begin.removeBond(_this2);
+        _this2.end.removeBond(_this2);
       });
     })();
   }
@@ -731,7 +728,7 @@ var Molecule = (function (Emitter) {
       value: function readJSON(json) {
         var molecule = new Molecule(),
             atoms = [],
-            i;
+            i = undefined;
 
         for (i in json.atoms) {
           var data = json.atoms[i];

@@ -83,8 +83,8 @@ export class Molecule extends Emitter {
    * @param callback
    */
   forEachAtom(callback) {
-    var atoms = this.atoms;
-    for (var i in atoms) {
+    let atoms = this.atoms;
+    for (let i in atoms) {
       callback.apply(atoms[i], [this]);
     }
   }
@@ -97,8 +97,8 @@ export class Molecule extends Emitter {
    * @param callback
    */
   forEachBond(callback) {
-    var bonds = this.bonds;
-    for (var i in bonds) {
+    let bonds = this.bonds;
+    for (let i in bonds) {
       callback.apply(bonds[i], [this]);
     }
   }
@@ -151,7 +151,7 @@ export class Molecule extends Emitter {
   }
 
   static readJSON(json) {
-    var molecule = new Molecule(),
+    let molecule = new Molecule(),
       atoms = [],
       i;
 

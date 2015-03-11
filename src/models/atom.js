@@ -9,20 +9,18 @@ export class Atom extends Emitter {
    * @constructor
    * @param index
    */
-  constructor(index = atomIndex++) {
+    constructor(index = atomIndex++) {
     super();
 
-    var _this = this;
+    this.index = index;
+    this.element = false;
+    this._data = {};
+    this.position = null;
+    this._bonds = [];
 
-    _this.index = index;
-    _this.element = false;
-    _this._data = {};
-    _this.position = null;
-    _this._bonds = [];
-
-    _this.on('delete', function () {
-      for (var i in _this._bonds) {
-        _this._bonds[i].delete();
+    this.on('delete', () => {
+      for (let i in this._bonds) {
+        this._bonds[i].delete();
       }
     });
   }
@@ -32,7 +30,7 @@ export class Atom extends Emitter {
    *
    * @param {Element} element
    */
-  setElement(element) {
+    setElement(element) {
     this.element = element;
   }
 
@@ -66,9 +64,9 @@ export class Atom extends Emitter {
    * @method setData
    * @param key
    * @param value
-   * @returns {Bond}
+   * @returns {*}
    */
-  setData(key, value) {
+    setData(key, value) {
     this._data[key] = value;
     return this;
   }
@@ -80,7 +78,7 @@ export class Atom extends Emitter {
    * @param key
    * @returns {*}
    */
-  getData(key) {
+    getData(key) {
     return this._data[key];
   }
 
@@ -91,7 +89,7 @@ export class Atom extends Emitter {
    * @param key
    * @returns {boolean}
    */
-  hasData(key) {
+    hasData(key) {
     return typeof this._data[key] !== 'undefined';
   }
 
@@ -101,7 +99,7 @@ export class Atom extends Emitter {
    * @method addBond
    * @param bond
    */
-  addBond(bond) {
+    addBond(bond) {
     this._bonds.push(bond);
   }
 
@@ -111,8 +109,8 @@ export class Atom extends Emitter {
    * @method removeBond
    * @param bond
    */
-  removeBond(bond) {
-    var _bonds = this._bonds;
+    removeBond(bond) {
+    let _bonds = this._bonds;
 
     _bonds.splice(_bonds.indexOf(bond), 1);
   }
@@ -126,7 +124,7 @@ export class Atom extends Emitter {
    *
    * @returns {{index: (Atom.index|*), atomicNumber: *, symbol: (*|symbol|Elements.symbol|Atom.toJSON.symbol|.toJSON.value.symbol|c.symbol), position: (Atom.position|*)}}
    */
-  toJSON() {
+    toJSON() {
     return {
       index: this.index,
       atomicNumber: this.atomicNumber,

@@ -13,19 +13,18 @@ export class Bond extends Emitter {
    * @param order
    * @param index
    */
-  constructor(begin, end, order = 1, index = bondIndex++) {
+    constructor(begin, end, order = 1, index = bondIndex++) {
     super();
 
-    var _this = this;
-    _this.index = index;
-    _this.begin = begin;
-    _this.end = end;
-    _this._order = order;
-    _this._data = {};
+    this.index = index;
+    this.begin = begin;
+    this.end = end;
+    this._order = order;
+    this._data = {};
 
-    _this.on('delete', function () {
-      _this.begin.removeBond(_this);
-      _this.end.removeBond(_this);
+    this.on('delete', () => {
+      this.begin.removeBond(this);
+      this.end.removeBond(this);
     });
   }
 
@@ -86,7 +85,7 @@ export class Bond extends Emitter {
    * @param value
    * @returns {Bond}
    */
-  setData(key, value) {
+    setData(key, value) {
     this._data[key] = value;
     return this;
   }
@@ -98,7 +97,7 @@ export class Bond extends Emitter {
    * @param key
    * @returns {*}
    */
-  getData(key) {
+    getData(key) {
     return this._data[key];
   }
 
@@ -109,7 +108,7 @@ export class Bond extends Emitter {
    * @param key
    * @returns {boolean}
    */
-  hasData(key) {
+    hasData(key) {
     return typeof this._data[key] !== 'undefined';
   }
 
@@ -120,7 +119,7 @@ export class Bond extends Emitter {
    * @param atom
    * @returns {*}
    */
-  getPartner(atom) {
+    getPartner(atom) {
     if (this._begin === atom) {
       return this._end;
     } else if (this._end === atom) {
@@ -138,7 +137,7 @@ export class Bond extends Emitter {
    * @param atom
    * @returns {string}
    */
-  getPositionOfAtom(atom) {
+    getPositionOfAtom(atom) {
     if (this._begin === atom) {
       return 'begin';
     } else if (this._end === atom) {
@@ -158,7 +157,7 @@ export class Bond extends Emitter {
    * @method toJSON
    * @returns {{begin: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), end: (Atom.toJSON.index|*|.toJSON.value.index|Number|number|Atom.index), order: *}}
    */
-  toJSON() {
+    toJSON() {
     return {
       begin: this.begin.index,
       end: this.end.index,
