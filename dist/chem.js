@@ -402,6 +402,28 @@ var Atom = (function (Emitter) {
       enumerable: true,
       configurable: true
     },
+    isConnected: {
+
+
+      /**
+       * Checks if this atom is connected to given atom
+       *
+       * @method isConnected
+       * @param {Atom} atom
+       */
+      value: function isConnected(atom) {
+        for (var bond in this.bonds) {
+          if (bond.getPartner(this) === atom) {
+            return true;
+          }
+        }
+
+        return false;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
     toJSON: {
 
       /**

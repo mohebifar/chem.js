@@ -120,6 +120,23 @@ export class Atom extends Emitter {
     this.emit('delete');
   }
 
+
+  /**
+   * Checks if this atom is connected to given atom
+   *
+   * @method isConnected
+   * @param {Atom} atom
+   */
+  isConnected(atom) {
+    for (let bond in this.bonds) {
+      if (bond.getPartner(this) === atom) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   /**
    * Returns the bond JSON representation.
    *
