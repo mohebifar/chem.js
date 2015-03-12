@@ -19,8 +19,9 @@ export class Atom extends Emitter {
     this._bonds = [];
 
     this.on('delete', () => {
-      for (let i in this._bonds) {
-        this._bonds[i].delete();
+      let bonds = this.bonds.slice(0, this.bonds.length);
+      for (let bond of bonds) {
+        bond.delete();
       }
     });
   }

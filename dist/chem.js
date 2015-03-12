@@ -255,8 +255,10 @@ var Atom = (function (Emitter) {
       _this._bonds = [];
 
       _this.on("delete", function () {
-        for (var i in _this._bonds) {
-          _this._bonds[i]["delete"]();
+        var bonds = _this.bonds.slice(0, _this.bonds.length);
+        for (var _iterator = bonds[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+          var bond = _step.value;
+          bond["delete"]();
         }
       });
     })();
