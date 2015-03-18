@@ -139,11 +139,26 @@ export class Molecule extends Emitter {
   }
 
   /**
+   * Reindex atoms of this molecule starting from 1
+   *
+   * @method reindex
+   */
+  reindex() {
+    let i = 0;
+
+    for (let j in this.atoms) {
+      this.atoms[j].setData('index', ++i);
+    }
+  }
+
+  /**
    * Returns the molecule JSON representation.
    *
    * @returns {{atoms: *, bonds: *}}
    */
   toJSON() {
+    this.reindex();
+
     return {
       atoms: this.atoms,
       bonds: this.bonds
@@ -167,7 +182,7 @@ export class Molecule extends Emitter {
         atom.position = data.position;
       }
 
-      atoms[i] = atom;
+      atoms[data.index] = atom;
       molecule.addAtom(atom);
     }
 
