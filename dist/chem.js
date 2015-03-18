@@ -394,6 +394,21 @@ var Atom = (function (Emitter) {
       enumerable: true,
       configurable: true
     },
+    removeData: {
+
+      /**
+       * Removes the data with given key
+       *
+       * @method removeData
+       * @param key
+       */
+      value: function removeData(key) {
+        return delete this._data[key];
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
     "delete": {
       value: function _delete() {
         this.emit("delete");
@@ -412,7 +427,8 @@ var Atom = (function (Emitter) {
        * @param {Atom} atom
        */
       value: function isConnected(atom) {
-        for (var bond in this.bonds) {
+        for (var _iterator2 = this.bonds[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
+          var bond = _step2.value;
           if (bond.getPartner(this) === atom) {
             return true;
           }
@@ -433,7 +449,7 @@ var Atom = (function (Emitter) {
        */
       value: function toJSON() {
         return {
-          index: this.index,
+          index: this.hasData("index") ? this.getData("index") : this.index,
           atomicNumber: this.atomicNumber,
           symbol: this.element.symbol,
           position: this.position
@@ -591,6 +607,21 @@ var Bond = (function (Emitter) {
       enumerable: true,
       configurable: true
     },
+    removeData: {
+
+      /**
+       * Removes the data with given key
+       *
+       * @method removeData
+       * @param key
+       */
+      value: function removeData(key) {
+        return delete this._data[key];
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
     getPartner: {
 
       /**
@@ -654,8 +685,8 @@ var Bond = (function (Emitter) {
        */
       value: function toJSON() {
         return {
-          begin: this.begin.index,
-          end: this.end.index,
+          begin: this.begin.hasData("index") ? this.begin.getData("index") : this.begin.index,
+          end: this.end.hasData("index") ? this.end.getData("index") : this.end.index,
           order: this.order
         };
       },
@@ -766,7 +797,7 @@ var Molecule = (function (Emitter) {
             atom.position = data.position;
           }
 
-          atoms[i] = atom;
+          atoms[data.index] = atom;
           molecule.addAtom(atom);
         }
 
@@ -961,6 +992,24 @@ var Molecule = (function (Emitter) {
       enumerable: true,
       configurable: true
     },
+    reindex: {
+
+      /**
+       * Reindex atoms of this molecule starting from 1
+       *
+       * @method reindex
+       */
+      value: function reindex() {
+        var i = 0;
+
+        for (var j in this.atoms) {
+          this.atoms[j].setData("index", ++i);
+        }
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
     toJSON: {
 
       /**
@@ -969,6 +1018,8 @@ var Molecule = (function (Emitter) {
        * @returns {{atoms: *, bonds: *}}
        */
       value: function toJSON() {
+        this.reindex();
+
         return {
           atoms: this.atoms,
           bonds: this.bonds

@@ -113,6 +113,16 @@ export class Bond extends Emitter {
   }
 
   /**
+   * Removes the data with given key
+   *
+   * @method removeData
+   * @param key
+   */
+    removeData(key) {
+    return delete this._data[key];
+  }
+
+  /**
    * Returns the atom which is not equal to given atom.
    *
    * @method getPartner
@@ -159,8 +169,8 @@ export class Bond extends Emitter {
    */
     toJSON() {
     return {
-      begin: this.begin.index,
-      end: this.end.index,
+      begin: this.begin.hasData('index') ? this.begin.getData('index') : this.begin.index,
+      end: this.end.hasData('index') ? this.end.getData('index') : this.end.index,
       order: this.order
     };
   }

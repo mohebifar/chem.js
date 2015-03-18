@@ -116,6 +116,16 @@ export class Atom extends Emitter {
     _bonds.splice(_bonds.indexOf(bond), 1);
   }
 
+  /**
+   * Removes the data with given key
+   *
+   * @method removeData
+   * @param key
+   */
+  removeData(key) {
+    return delete this._data[key];
+  }
+
   delete() {
     this.emit('delete');
   }
@@ -128,7 +138,7 @@ export class Atom extends Emitter {
    * @param {Atom} atom
    */
   isConnected(atom) {
-    for (let bond in this.bonds) {
+    for (let bond of this.bonds) {
       if (bond.getPartner(this) === atom) {
         return true;
       }
@@ -144,7 +154,7 @@ export class Atom extends Emitter {
    */
     toJSON() {
     return {
-      index: this.index,
+      index: this.hasData('index') ? this.getData('index') : this.index,
       atomicNumber: this.atomicNumber,
       symbol: this.element.symbol,
       position: this.position
