@@ -46,21 +46,9 @@ grunt.initConfig({
     options: {
       spawn: false
     },
-    livereload: {
-      files: ['src/**/*.js', 'examples/**/*'],
-      options: {
-        livereload: true
-      }
-    },
     scripts: {
       files: ['src/**/*.js'],
       tasks: ['default']
-    },
-    examples: {
-      files: ['examples/**/*'],
-      options: {
-        livereload: true
-      }
     },
     elements: {
       files: ['src/data/elements.json'],
